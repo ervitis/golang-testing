@@ -16,9 +16,6 @@ install: true
 notifications:
   email: false
 
-before_script:
-  - go install -mod vendor golang.org/x/lint
-
 script:
   - make check
   - make cover
