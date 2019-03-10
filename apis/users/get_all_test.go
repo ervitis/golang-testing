@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/ervitis/golang-testing/routes"
+	"github.com/ervitis/golang-testing/server"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"net/http"
@@ -11,31 +11,27 @@ import (
 
 type GetUsersTestSuite struct {
 	suite.Suite
-	server *routes.Server
+	server *server.Server
 
 	req *http.Request
 	rec *httptest.ResponseRecorder
 }
 
 func (suite *GetUsersTestSuite) SetupTest() {
-	suite.server = &routes.Server{Addr: "http://localhost", Port: "10000"}
+	suite.server = &server.Server{Addr: "http://localhost", Port: "10000"}
 
 	suite.req, _ = http.NewRequest(http.MethodGet, suite.server.Url(), nil)
 	suite.rec = httptest.NewRecorder()
 }
 
-func (suite *GetUsersTestSuite) AfterTest(_, _ string) {
-
-}
+func (suite *GetUsersTestSuite) AfterTest(_, _ string) {}
 
 func (suite *GetUsersTestSuite) TestGetAllUsersOk() {
 	mockito := new(mocker)
 
-	var users []*User
+	mockito.On("ReadData", mock.Anything).Return(mockUsers(), nil)
 
-	mockito.On("ReadData", mock.Anything, &users).Return(nil)
-
-	h := GetHandler{
+	h := ReqHandler{
 		Reader: mockito,
 	}
 

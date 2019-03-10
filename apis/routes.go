@@ -23,11 +23,10 @@ func MainController(hs Handlers) *mux.Router {
 func Routes() Handlers {
 	jr := &helpers.JsonReader{}
 
-	apig := &users.GetHandler{
-		Reader: jr,
-	}
+	apis := &users.ReqHandler{Reader: jr}
 
 	return Handlers{
-		"/users": apig.GetAllUsers,
+		"/users": apis.GetAllUsers,
+		"/user/{userId}": apis.GetUser,
 	}
 }

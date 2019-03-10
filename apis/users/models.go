@@ -1,5 +1,11 @@
 package users
 
+import "github.com/ervitis/golang-testing/helpers"
+
+type ReqHandler struct {
+	Reader helpers.Reader
+}
+
 type User struct {
 	Id      int     `json:"id"`
 	Name    string  `json:"name"`

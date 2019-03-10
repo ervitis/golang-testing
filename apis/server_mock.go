@@ -1,7 +1,7 @@
 package apis
 
 /*
-func setupServer(s *routes.Server, hs Handlers) *http.Server {
+func setupServer(s *server.Server, hs Handlers) *http.Server {
 	r := &mux.Router{}
 
 	for p, h := range hs {

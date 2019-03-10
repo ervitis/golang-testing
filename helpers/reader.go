@@ -1,35 +1,31 @@
 package helpers
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 )
 
 type Reader interface {
-	ReadData(path string, parser interface{}) error
+	ReadData(path string) ([]byte, error)
 }
 
 type JsonReader struct{}
 
-func (j *JsonReader) ReadData(path string, parser interface{}) error {
+func (j *JsonReader) ReadData(path string) ([]byte, error) {
 	path, err := filepath.Abs(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	f, err := os.Open(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	defer f.Close()
 
 	b, _ := ioutil.ReadAll(f)
-	if err = json.Unmarshal(b, parser); err != nil {
-		return err
-	}
 
-	return nil
+	return b, nil
 }
