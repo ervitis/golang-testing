@@ -29,7 +29,7 @@ func (suite *GetUsersTestSuite) AfterTest(_, _ string) {
 }
 
 func (suite *GetUsersTestSuite) TestGetAllUsersOk() {
-	mockito := new(mockGetUsers)
+	mockito := new(mocker)
 
 	var users []*User
 
