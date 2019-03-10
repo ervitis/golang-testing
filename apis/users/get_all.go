@@ -18,5 +18,4 @@ func (h *GetHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	helpers.Response(w, http.StatusOK, users)
-	return
 }

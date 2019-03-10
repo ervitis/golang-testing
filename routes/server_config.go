@@ -9,7 +9,7 @@ type Server struct {
 	Addr string
 }
 
-type urlIface interface {
+type UrlIface interface {
 	Url() string
 	FullUrl(...string) string
 	PortAddress() string
