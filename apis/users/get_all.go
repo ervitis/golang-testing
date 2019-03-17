@@ -18,9 +18,12 @@ func (h *ReqHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = json.Unmarshal(b, &users)
+	if err = json.Unmarshal(b, &users); err != nil {
+		helpers.ResponseWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 
-	qpage := r.FormValue("page")
+	qpage := r.URL.Query().Get("page")
 	if qpage == "" {
 		page = 1
 	} else {
@@ -39,7 +42,7 @@ func (h *ReqHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if stop > len(users) {
-			stop = len(users)
+		stop = len(users)
 	}
 
 

@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -15,6 +16,19 @@ func (m *mocker) ReadData(path string) ([]byte, error) {
 	return b, args.Error(1)
 }
 
-func mockUsers() []byte {
-	return []byte(`[{"id": 1, "name": "test", "surname": null, "email": "test@test.com", "gender": null, "country": "Spain"}]`)
+func mockUsers(n ...int) []*User {
+	var users []*User
+	var end int
+
+	if n == nil {
+		end = 150
+	} else {
+		end = n[0]
+	}
+
+	for i := 1; i < end; i++ {
+		user := &User{Surname: nil, Name: fmt.Sprintf("test%d", i), Id: i, Gender: nil, Email: "test@test.com", Country: "Spain"}
+		users = append(users, user)
+	}
+	return users
 }
