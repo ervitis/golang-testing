@@ -14,8 +14,6 @@ type getUserTestSuite struct {
 	suite.Suite
 	server *server.Server
 
-	pathParams map[string]string
-
 	req *http.Request
 	rec *httptest.ResponseRecorder
 }
