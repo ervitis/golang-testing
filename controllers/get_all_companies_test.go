@@ -71,7 +71,7 @@ func (suite *TestGetCompaniesSuite) TestGetAllCompaniesWithPage() {
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 
-	var resp []*user
+	var resp []*company
 	if err := json.NewDecoder(suite.rec.Body).Decode(&resp); err != nil {
 		panic(err)
 	}
@@ -113,13 +113,13 @@ func (suite *TestGetCompaniesSuite) TestGetAllCompaniesPageIsBigThanElements() {
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 
-	var resp []*user
+	var resp []*company
 	if err := json.NewDecoder(suite.rec.Body).Decode(&resp); err != nil {
 		panic(err)
 	}
 
 	suite.Equal(0, len(resp))
-	suite.Equal([]*user{}, resp)
+	suite.Equal([]*company{}, resp)
 }
 
 func (suite *TestGetCompaniesSuite) TestGetAllCompaniesPageIEqualThanElements() {
