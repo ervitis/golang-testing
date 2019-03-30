@@ -24,8 +24,9 @@ func Routes() Handlers {
 	apis := &controllers.ReqHandler{Reader: &helpers.JsonReader{}}
 
 	return Handlers{
-		"/users":         apis.GetAllUsers,
-		"/user/{userId}": apis.GetUser,
-		"/companies":     apis.GetAllCompanies,
+		"/users":                 apis.GetAllUsers,
+		"/user/{userId}":         apis.GetUser,
+		"/companies":             apis.GetAllCompanies,
+		"/company/{companyId}": apis.GetCompany,
 	}
 }
