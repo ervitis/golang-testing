@@ -1,4 +1,4 @@
-package users
+package controllers
 
 import (
 	"github.com/ervitis/golang-testing/server"

@@ -1,4 +1,4 @@
-package users
+package controllers
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-type GetUsersTestSuite struct {
+type TestGetCompaniesSuite struct {
 	suite.Suite
 	server *server.Server
 
@@ -18,60 +18,60 @@ type GetUsersTestSuite struct {
 	rec *httptest.ResponseRecorder
 }
 
-func (suite *GetUsersTestSuite) SetupTest() {
+func (suite *TestGetCompaniesSuite) SetupTest() {
 	suite.server = &server.Server{Addr: "http://localhost", Port: "10000"}
 
 	suite.req, _ = http.NewRequest(http.MethodGet, suite.server.Url(), nil)
 	suite.rec = httptest.NewRecorder()
 }
 
-func (suite *GetUsersTestSuite) AfterTest(_, _ string) {}
+func (suite *TestGetCompaniesSuite) AfterTest(_, _ string) {}
 
-func (suite *GetUsersTestSuite) TestGetAllUsersOk() {
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesOk() {
 	mockito := new(mocker)
 
-	mockito.On("ReadData", mock.Anything).Return(mockUsers(), nil)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(), nil)
 
 	h := ReqHandler{
 		Reader: mockito,
 	}
 
-	h.GetAllUsers(suite.rec, suite.req)
+	h.GetAllCompanies(suite.rec, suite.req)
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 }
 
-func (suite *GetUsersTestSuite) TestGetAllUsersNoPage() {
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesNoPage() {
 	mockito := new(mocker)
 
-	mockito.On("ReadData", mock.Anything).Return(mockUsers(), nil)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(), nil)
 
 	h := ReqHandler{
 		Reader: mockito,
 	}
 
-	h.GetAllUsers(suite.rec, suite.req)
+	h.GetAllCompanies(suite.rec, suite.req)
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 }
 
-func (suite *GetUsersTestSuite) TestGetAllUsersWithPage() {
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesWithPage() {
 	q := suite.req.URL.Query()
 	q.Add("page", "2")
 	suite.req.URL.RawQuery = q.Encode()
 
 	mockito := new(mocker)
-	mockito.On("ReadData", mock.Anything).Return(mockUsers(), nil)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(), nil)
 
 	h := ReqHandler{
 		Reader: mockito,
 	}
 
-	h.GetAllUsers(suite.rec, suite.req)
+	h.GetAllCompanies(suite.rec, suite.req)
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 
-	var resp []*User
+	var resp []*user
 	if err := json.NewDecoder(suite.rec.Body).Decode(&resp); err != nil {
 		panic(err)
 	}
@@ -80,65 +80,65 @@ func (suite *GetUsersTestSuite) TestGetAllUsersWithPage() {
 	suite.Equal(16, resp[0].Id)
 }
 
-func (suite *GetUsersTestSuite) TestGetAllUsersWithWrongPageNumber() {
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesWithWrongPageNumber() {
 	q := suite.req.URL.Query()
 	q.Add("page", "ab")
 	suite.req.URL.RawQuery = q.Encode()
 
 	mockito := new(mocker)
-	mockito.On("ReadData", mock.Anything).Return(mockUsers(), nil)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(), nil)
 
 	h := ReqHandler{
 		Reader: mockito,
 	}
 
-	h.GetAllUsers(suite.rec, suite.req)
+	h.GetAllCompanies(suite.rec, suite.req)
 
 	suite.Equal(http.StatusBadRequest, suite.rec.Code)
 }
 
-func (suite *GetUsersTestSuite) TestGetAllUsersPageIsBigThanElements() {
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesPageIsBigThanElements() {
 	q := suite.req.URL.Query()
 	q.Add("page", "40")
 	suite.req.URL.RawQuery = q.Encode()
 
 	mockito := new(mocker)
-	mockito.On("ReadData", mock.Anything).Return(mockUsers(3), nil)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(3), nil)
 
 	h := ReqHandler{
 		Reader: mockito,
 	}
 
-	h.GetAllUsers(suite.rec, suite.req)
+	h.GetAllCompanies(suite.rec, suite.req)
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 
-	var resp []*User
+	var resp []*user
 	if err := json.NewDecoder(suite.rec.Body).Decode(&resp); err != nil {
 		panic(err)
 	}
 
 	suite.Equal(0, len(resp))
-	suite.Equal([]*User{}, resp)
+	suite.Equal([]*user{}, resp)
 }
 
-func (suite *GetUsersTestSuite) TestGetAllUsersPageIEqualThanElements() {
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesPageIEqualThanElements() {
 	q := suite.req.URL.Query()
 	q.Add("page", "2")
 	suite.req.URL.RawQuery = q.Encode()
 
 	mockito := new(mocker)
-	mockito.On("ReadData", mock.Anything).Return(mockUsers(30), nil)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(30), nil)
 
 	h := ReqHandler{
 		Reader: mockito,
 	}
 
-	h.GetAllUsers(suite.rec, suite.req)
+	h.GetAllCompanies(suite.rec, suite.req)
 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 }
 
-func TestGetUsers(t *testing.T) {
-	suite.Run(t, new(GetUsersTestSuite))
+func TestGetCompanies(t *testing.T) {
+	suite.Run(t, new(TestGetCompaniesSuite))
 }

@@ -1,7 +1,7 @@
-package apis
+package routing
 
 import (
-	"github.com/ervitis/golang-testing/apis/users"
+	"github.com/ervitis/golang-testing/controllers"
 	"github.com/ervitis/golang-testing/helpers"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -21,12 +21,11 @@ func MainController(hs Handlers) *mux.Router {
 }
 
 func Routes() Handlers {
-	jr := &helpers.JsonReader{}
-
-	apis := &users.ReqHandler{Reader: jr}
+	apis := &controllers.ReqHandler{Reader: &helpers.JsonReader{}}
 
 	return Handlers{
-		"/users": apis.GetAllUsers,
+		"/users":         apis.GetAllUsers,
 		"/user/{userId}": apis.GetUser,
+		"/companies":     apis.GetAllCompanies,
 	}
 }

@@ -1,4 +1,4 @@
-package users
+package controllers
 
 import (
 	"bytes"
@@ -29,14 +29,14 @@ func (h *ReqHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uid, _ := strconv.Atoi(userId)
-	user := gojsonq.New().Reader(bytes.NewReader(b)).Where("id", "eq", uid).First()
-	if user == nil {
-		helpers.Response(w, http.StatusNotFound, user)
+	userData := gojsonq.New().Reader(bytes.NewReader(b)).Where("id", "eq", uid).First()
+	if userData == nil {
+		helpers.Response(w, http.StatusNotFound, userData)
 		return
 	}
 
-	u := &User{}
-	b, _ = json.Marshal(user)
+	u := &user{}
+	b, _ = json.Marshal(userData)
 	_ = json.Unmarshal(b, u)
 
 	helpers.Response(w, http.StatusOK, u)

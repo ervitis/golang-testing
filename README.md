@@ -11,4 +11,4 @@ GET - users
 
 GET - companies/{companyId}  
 GET - companies  
-GET - companies/users
+GET - companies?user={userId}
