@@ -139,6 +139,64 @@ func (suite *TestGetCompaniesSuite) TestGetAllCompaniesPageIEqualThanElements() 
 	suite.Equal(http.StatusOK, suite.rec.Code)
 }
 
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesFilteredByUser() {
+	q := suite.req.URL.Query()
+	q.Add("userId", "2")
+	suite.req.URL.RawQuery = q.Encode()
+
+	mockito := new(mocker)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(30), nil)
+
+	h := ReqHandler{
+		Reader: mockito,
+	}
+
+	h.GetAllCompanies(suite.rec, suite.req)
+
+	suite.Equal(http.StatusOK, suite.rec.Code)
+}
+
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesFilteredByUserNotFound() {
+	q := suite.req.URL.Query()
+	q.Add("userId", "4")
+	suite.req.URL.RawQuery = q.Encode()
+
+	mockito := new(mocker)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(3), nil)
+
+	h := ReqHandler{
+		Reader: mockito,
+	}
+
+	h.GetAllCompanies(suite.rec, suite.req)
+
+	suite.Equal(http.StatusNotFound, suite.rec.Code)
+}
+
+func (suite *TestGetCompaniesSuite) TestGetAllCompaniesFilteredByUserOneElement() {
+	q := suite.req.URL.Query()
+	q.Add("userId", "4")
+	suite.req.URL.RawQuery = q.Encode()
+
+	mockito := new(mocker)
+	mockito.On("ReadData", mock.Anything).Return(mockCompanies(5), nil)
+
+	h := ReqHandler{
+		Reader: mockito,
+	}
+
+	h.GetAllCompanies(suite.rec, suite.req)
+
+	suite.Equal(http.StatusOK, suite.rec.Code)
+
+	var resp []*company
+	if err := json.NewDecoder(suite.rec.Body).Decode(&resp); err != nil {
+		panic(err)
+	}
+
+	suite.Equal(1, len(resp))
+}
+
 func TestGetCompanies(t *testing.T) {
 	suite.Run(t, new(TestGetCompaniesSuite))
 }
