@@ -53,7 +53,13 @@ func (p *Paginator) Paginate(page string) ([]map[string]interface{}, error) {
 	}
 
 	s := reflect.ValueOf(decoded)
-	output := make([]map[string]interface{}, p.itemsPerPage)
+	var output []map[string]interface{}
+	if p.end < p.itemsPerPage {
+		output = make([]map[string]interface{}, p.end)
+	} else {
+		output = make([]map[string]interface{}, p.itemsPerPage)
+	}
+
 	j := 0
 	for i := p.start; i < p.end; i++ {
 		if v, ok := s.Index(i).Interface().(map[string]interface{}); !ok {
