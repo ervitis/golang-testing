@@ -1,17 +1,18 @@
 package controllers
 
 import (
+	"github.com/ervitis/golang-testing/controllers/_routing"
 	"github.com/ervitis/golang-testing/helpers"
 	"net/http"
 )
 
-func Routes() Handlers {
+func Routes() _routing.Handlers {
 	apis := &ReqHandler{Reader: &helpers.JsonReader{}}
 
-	return Handlers{
-		"/users":               &apihandler{fnsHandler: apis.GetAllUsers, method: http.MethodGet, queries: "page"},
-		"/user/{userId}":       &apihandler{fnsHandler: apis.GetUser, method: http.MethodGet},
-		"/companies":           &apihandler{fnsHandler: apis.GetAllCompanies, method: http.MethodGet},
-		"/company/{companyId}": &apihandler{fnsHandler: apis.GetCompany, method: http.MethodGet},
+	return _routing.Handlers{
+		"/users":               &_routing.Apihandler{FnsHandler: apis.GetAllUsers, Method: http.MethodGet, Queries: "page"},
+		"/user/{userId}":       &_routing.Apihandler{FnsHandler: apis.GetUser, Method: http.MethodGet},
+		"/companies":           &_routing.Apihandler{FnsHandler: apis.GetAllCompanies, Method: http.MethodGet},
+		"/company/{companyId}": &_routing.Apihandler{FnsHandler: apis.GetCompany, Method: http.MethodGet},
 	}
 }

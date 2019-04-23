@@ -2,13 +2,14 @@ package main
 
 import (
 	"github.com/ervitis/golang-testing/controllers"
+	"github.com/ervitis/golang-testing/controllers/_routing"
 	"github.com/ervitis/golang-testing/server"
 	"net/http"
 )
 
 func main() {
 	srv := &server.Server{Addr: "http://localhost", Port: "8080"}
-	r, err := controllers.MainController(controllers.Routes())
+	r, err := _routing.MainController(controllers.Routes())
 	if err != nil {
 		panic(err)
 	}
