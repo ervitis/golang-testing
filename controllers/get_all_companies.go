@@ -35,7 +35,7 @@ func (h *ReqHandler) GetAllCompanies(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		b, _ = json.Marshal(data)
-		json.Unmarshal(b, &companies)
+		_ = json.Unmarshal(b, &companies)
 	}
 
 	helpers.Response(w, http.StatusOK, companies)

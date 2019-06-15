@@ -21,7 +21,7 @@ func (h *ReqHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		b, _ = json.Marshal(data)
-		json.Unmarshal(b, &users)
+		_ = json.Unmarshal(b, &users)
 	}
 
 	helpers.Response(w, http.StatusOK, users)

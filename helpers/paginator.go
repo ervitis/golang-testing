@@ -66,7 +66,7 @@ func (p *Paginator) Paginate(page string) ([]map[string]interface{}, error) {
 			return nil, errors.New("not interface")
 		} else {
 			b, _ := json.Marshal(v)
-			json.Unmarshal(b, &output[j])
+			_ = json.Unmarshal(b, &output[j])
 			j++
 		}
 	}
